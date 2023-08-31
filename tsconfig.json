@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@configs/*": ["src/configs/*"],
+      "@dtos/*": ["src/chamada/dto/*"],
+      "@services/*": ["src/chamada/services/*"],
+      "@entities/*": ["src/chamada/entities/*"],
+      "@controllers/*": ["src/chamada/controllers/*"],
+      "@helpers/*": ["src/common/helpers/*"],
+      "@utils/*": ["src/common/utils/*"],
+    },
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false
+  }
+}
