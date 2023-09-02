@@ -1,6 +1,6 @@
 # API Volley
 
-**API Volley** é uma API que tem como objetivo, uma gestão interna de torneios e seus eventos, juntamente de uma integração com microsserviços.
+**API Volley** é uma API que tem como objetivo, uma gestão interna de torneios e seus eventos, juntamente de uma integração com microsserviços. <br />
 Api contempla toda gestão interna como:
 
 * Cadastro de Torneios e Eventos

@@ -1,26 +1,33 @@
-import { EventEnumType } from 'src/enums';
-import { Categories } from 'src/modules/categories/entities/category.entity';
 import { Players } from 'src/modules/players/entities/player.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinTable,
-  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Events } from '../../events/entities/event.entity';
+import { CategoryEnumType } from 'src/enums';
 
-@Entity('tb_events')
-export class Events {
+@Entity('tb_categories')
+export class Categories {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
   @Column()
-  name: string;
+  category: string;
 
-  @Column({ type: 'enum', enum: EventEnumType, default: EventEnumType.OPENNED })
-  active: number;
+  @Column()
+  description: string;
+
+  @Column({
+    type: 'enum',
+    enum: CategoryEnumType,
+    default: CategoryEnumType.ACTIVE,
+  })
+  status: number;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -38,11 +45,11 @@ export class Events {
   @Column({ type: 'timestamp', default: null })
   deletedAt?: Date;
 
-  @ManyToOne(() => Categories, (categories) => categories.events)
+  @OneToMany(() => Events, (event) => event.categories)
   @JoinTable()
-  categories: Categories;
+  events: Array<Events>;
 
-  @ManyToOne(() => Players, (player) => player.categories)
+  @OneToMany(() => Players, (player) => player.categories)
   @JoinTable()
-  players: Players;
+  players: Array<Players>;
 }

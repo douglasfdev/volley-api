@@ -4,7 +4,8 @@ import { getEnvPath } from './common/helpers/env.helper';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmAsyncConfig } from '@configs/typeorm.config';
 import { EventsModule } from './modules/events/events.module';
-import { VolleyballModule } from './modules/volleyball/volleyball.module';
+import { PlayersModule } from './modules/players/players.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 
@@ -17,7 +18,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     EventsModule,
-    VolleyballModule,
+    PlayersModule,
+    CategoriesModule,
   ],
   controllers: [],
 })
