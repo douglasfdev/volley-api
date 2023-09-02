@@ -64,7 +64,7 @@ export class CategoriesService {
         },
       },
       where: { id },
-      relations: ['events', 'players'],
+      relations: ['categories', 'players'],
     });
   }
 

@@ -1,3 +1,4 @@
+import { Players } from '../entities/player.entity';
 import { UpdatePlayerDto } from './../dto/update-player.dto';
 import { CreatePlayerDto } from './../dto/create-player.dto';
 import { PlayersService } from './../service/players.service';
@@ -12,11 +13,9 @@ import {
   ValidationPipe,
   HttpCode,
   HttpStatus,
-  Query,
   Param,
 } from '@nestjs/common';
 import { PlayersValidationParametersPipe } from '../pipes/players.validation.parameters.pipe';
-import { Players } from '../entities/player.entity';
 
 @Controller({
   path: 'players',
@@ -44,7 +43,7 @@ export class PlayersController {
   @HttpCode(HttpStatus.OK)
   findOne(
     @Param('id', PlayersValidationParametersPipe) id: string,
-  ): Promise<UpdatePlayerDto> {
+  ): Promise<Partial<Players>> {
     return this.playersService.findOne(id);
   }
 

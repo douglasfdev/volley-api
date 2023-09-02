@@ -11,7 +11,7 @@ import {
 import { Events } from '../../events/entities/event.entity';
 import { CategoryEnumType } from 'src/enums';
 
-@Entity('tb_categories')
+@Entity('tb_category')
 export class Categories {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
@@ -46,10 +46,8 @@ export class Categories {
   deletedAt?: Date;
 
   @OneToMany(() => Events, (event) => event.categories)
-  @JoinTable()
   events: Array<Events>;
 
   @OneToMany(() => Players, (player) => player.categories)
-  @JoinTable()
   players: Array<Players>;
 }

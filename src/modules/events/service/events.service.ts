@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { EventEnumType } from 'src/enums';
+import { CategoryEnumType, EventEnumType } from 'src/enums';
 import { Players } from 'src/modules/players/entities/player.entity';
 import { Categories } from 'src/modules/categories/entities/category.entity';
 
@@ -53,10 +53,13 @@ export class EventsService {
     });
 
     await this.categoriesRepository.update(categories.id, {
-      status: EventEnumType.IN_PROGRESS,
+      status: CategoryEnumType.ACTIVE,
     });
 
-    const savedEvent = await this.eventRepository.save(createdEvent);
+    const savedEvent = await this.eventRepository.save({
+      ...createdEvent,
+      active: EventEnumType.IN_PROGRESS,
+    });
 
     const { id, name } = savedEvent;
 

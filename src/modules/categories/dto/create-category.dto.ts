@@ -1,5 +1,4 @@
-import { ArrayMinSize, IsArray, IsNotEmpty, IsString } from 'class-validator';
-import { Events } from 'src/modules/events/entities/event.entity';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCategoryDto {
   @IsString()

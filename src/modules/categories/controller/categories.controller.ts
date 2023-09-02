@@ -15,7 +15,10 @@ import {
 import { Categories } from '../entities/category.entity';
 import { Events } from 'src/modules/events/entities/event.entity';
 
-@Controller('categories')
+@Controller({
+  path: 'categories',
+  version: '1',
+})
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
