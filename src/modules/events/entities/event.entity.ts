@@ -18,7 +18,7 @@ export class Events {
   @Index('id_events_index', { unique: true })
   id?: string;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
   @Column({ type: 'enum', enum: EventEnumType, default: EventEnumType.OPENNED })

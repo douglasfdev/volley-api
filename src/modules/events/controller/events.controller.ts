@@ -44,11 +44,8 @@ export class EventsController {
 
   @Patch(':id')
   @HttpCode(HttpStatus.ACCEPTED)
-  update(
-    @Param('id') id: string,
-    @Body() createEventDto: CreateEventDto,
-  ): Promise<CreateEventDto> {
-    return this.eventsService.updateToProgress(id, createEventDto);
+  update(@Param('id') id: string): Promise<Partial<CreateEventDto>> {
+    return this.eventsService.updateToDone(id);
   }
 
   @Delete(':id')

@@ -21,30 +21,15 @@ export class EventsService {
   ) {}
 
   public async initEvent(createEventDto: CreateEventDto) {
-    const players = await this.playerRepository.findOneBy({
-      id: createEventDto.players,
-    });
-    const categories = await this.categoriesRepository.findOneBy({
-      id: createEventDto.categories,
-    });
-
-    if (!players) {
-      throw new NotFoundException(
-        `Player id: ${createEventDto.players} not found`,
-      );
-    }
-
-    if (!categories) {
-      throw new NotFoundException(
-        `Category id: ${createEventDto.categories} not found`,
-      );
-    }
-
     const event = new Events();
-    event.categories = await [categories];
-    event.players = [players];
+    event.name = createEventDto.name;
+    event.categories = createEventDto.categories;
+    event.players = createEventDto.players;
 
-    await this.categoriesRepository.update(categories.id, {
+    const categoryId = event.categories.map((category) => category.id);
+    const playerId = event.players.map((player) => player.id);
+
+    await this.categoriesRepository.update(categoryId, {
       status: CategoryEnumType.ACTIVE,
     });
 
@@ -58,8 +43,8 @@ export class EventsService {
     return {
       id,
       name,
-      playerId: players.id,
-      categorieId: categories.id,
+      playerId,
+      categoryId,
     };
   }
 
@@ -109,45 +94,26 @@ export class EventsService {
     });
   }
 
-  public async updateToProgress(id: string, createEventDto: CreateEventDto) {
+  public async updateToDone(id: string) {
     const event = await this.eventRepository.findOneBy({ id });
-    const players = await this.playerRepository.findOneBy({
-      id: createEventDto.players,
-    });
-    const categories = await this.categoriesRepository.findOneBy({
-      id: createEventDto.categories,
-    });
 
     if (!event) {
       throw new NotFoundException(`Event ${id} not found`);
     }
 
-    if (!players) {
-      throw new NotFoundException(
-        `Player id: ${createEventDto.players} not found`,
-      );
-    }
-
-    if (!categories) {
-      throw new NotFoundException(
-        `Category id: ${createEventDto.categories} not found`,
-      );
-    }
-
-    this.eventRepository.update(id, {
-      active: EventEnumType.IN_PROGRESS,
-      players: [players],
-      categories: [categories],
+    await this.eventRepository.update(id, {
+      active: EventEnumType.DONE,
     });
 
-    const { name } = event;
+    const { name, operation, value, players, categories } = event;
 
     return {
-      id,
-      name,
-      status: event.active,
-      categoryId: categories.id,
-      playerId: players.id,
+      eventId: id,
+      eventName: name,
+      operation,
+      value,
+      players,
+      categories,
     };
   }
 
