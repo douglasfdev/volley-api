@@ -1,12 +1,6 @@
 import { Events } from './../entities/event.entity';
-import { UpdateEventDto } from './../dto/update-event.dto';
 import { CreateEventDto } from './../dto/create-event.dto';
-import {
-  Injectable,
-  Logger,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CategoryEnumType, EventEnumType } from 'src/enums';
@@ -46,18 +40,16 @@ export class EventsService {
       );
     }
 
-    const createdEvent = this.eventRepository.create({
-      ...createEventDto,
-      players,
-      categories,
-    });
+    const event = new Events();
+    event.categories = await [categories];
+    event.players = [players];
 
     await this.categoriesRepository.update(categories.id, {
       status: CategoryEnumType.ACTIVE,
     });
 
     const savedEvent = await this.eventRepository.save({
-      ...createdEvent,
+      ...event,
       active: EventEnumType.IN_PROGRESS,
     });
 
@@ -76,23 +68,45 @@ export class EventsService {
       select: {
         id: true,
         name: true,
+        players: {
+          id: true,
+          ranking: true,
+          rankingPosition: true,
+        },
+        categories: {
+          id: true,
+          category: true,
+          description: true,
+        },
       },
+      relations: ['players', 'categories'],
     });
   }
 
-  public async findOne(id: string): Promise<Partial<Events>> {
-    const event = await this.eventRepository.findOneBy({ id });
+  public async listByCategories(
+    id: string,
+  ): Promise<Partial<Array<Categories>>> {
+    const category = await this.categoriesRepository.findOneBy({ id });
 
-    if (!event) {
-      throw new NotFoundException(`Event ${id} not found`);
+    if (!category) {
+      throw new NotFoundException(`Category ${id} not found`);
     }
 
-    const { name } = event;
-
-    return {
-      id,
-      name,
-    };
+    return this.categoriesRepository.find({
+      select: {
+        id: true,
+        category: true,
+        description: true,
+        events: {
+          id: true,
+          name: true,
+          operation: true,
+          value: true,
+        },
+      },
+      where: { id },
+      relations: ['events', 'players'],
+    });
   }
 
   public async updateToProgress(id: string, createEventDto: CreateEventDto) {
@@ -122,8 +136,8 @@ export class EventsService {
 
     this.eventRepository.update(id, {
       active: EventEnumType.IN_PROGRESS,
-      players,
-      categories,
+      players: [players],
+      categories: [categories],
     });
 
     const { name } = event;
@@ -132,8 +146,8 @@ export class EventsService {
       id,
       name,
       status: event.active,
-      categoryId: categories,
-      playerId: players,
+      categoryId: categories.id,
+      playerId: players.id,
     };
   }
 

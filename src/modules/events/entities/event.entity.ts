@@ -5,8 +5,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinTable,
-  ManyToOne,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -14,6 +15,7 @@ import {
 @Entity('tb_events')
 export class Events {
   @PrimaryGeneratedColumn('uuid')
+  @Index('id_events_index', { unique: true })
   id?: string;
 
   @Column()
@@ -21,6 +23,12 @@ export class Events {
 
   @Column({ type: 'enum', enum: EventEnumType, default: EventEnumType.OPENNED })
   active: number;
+
+  @Column({ type: 'varchar', nullable: true })
+  operation?: string;
+
+  @Column({ type: 'integer', nullable: true })
+  value?: number;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -38,11 +46,11 @@ export class Events {
   @Column({ type: 'timestamp', default: null })
   deletedAt?: Date;
 
-  @ManyToOne(() => Categories, (categories) => categories.events)
+  @ManyToMany(() => Categories, (categories) => categories.events)
   @JoinTable()
-  categories: Categories;
+  categories: Array<Categories>;
 
-  @ManyToOne(() => Players, (player) => player.categories)
+  @ManyToMany(() => Players, (player) => player.events)
   @JoinTable()
-  players: Players;
+  players: Array<Players>;
 }

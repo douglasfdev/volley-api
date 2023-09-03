@@ -38,8 +38,15 @@ export class CategoriesService {
         id: true,
         category: true,
         description: true,
+        events: {
+          id: true,
+          name: true,
+          operation: true,
+          value: true,
+        },
         players: {
           id: true,
+          name: true,
           ranking: true,
           rankingPosition: true,
         },

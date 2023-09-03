@@ -5,8 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  OneToMany,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -57,11 +56,9 @@ export class Players {
   @Column({ type: 'timestamp', default: null })
   deletedAt?: Date;
 
-  @OneToMany(() => Categories, (categories) => categories.players)
-  @JoinTable()
+  @ManyToMany(() => Categories, (categories) => categories.players)
   categories: Array<Categories>;
 
-  @OneToMany(() => Events, (events) => events.players)
-  @JoinTable()
-  players: Array<Event>;
+  @ManyToMany(() => Events, (events) => events.players)
+  events: Array<Events>;
 }

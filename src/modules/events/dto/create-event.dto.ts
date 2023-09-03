@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsUUID } from 'class-validator';
 
 export class CreateEventDto {
   @IsString()
@@ -6,8 +6,18 @@ export class CreateEventDto {
   readonly name: string;
 
   @IsUUID()
+  @IsNotEmpty()
   readonly players?: string;
 
   @IsUUID()
+  @IsNotEmpty()
   readonly categories?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly operation?: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  readonly value?: number;
 }

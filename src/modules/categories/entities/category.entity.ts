@@ -3,8 +3,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinTable,
-  OneToMany,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -14,6 +15,7 @@ import { CategoryEnumType } from 'src/enums';
 @Entity('tb_category')
 export class Categories {
   @PrimaryGeneratedColumn('uuid')
+  @Index('id_category_index', { unique: true })
   id?: string;
 
   @Column()
@@ -45,9 +47,10 @@ export class Categories {
   @Column({ type: 'timestamp', default: null })
   deletedAt?: Date;
 
-  @OneToMany(() => Events, (event) => event.categories)
+  @ManyToMany(() => Events, (event) => event.categories)
   events: Array<Events>;
 
-  @OneToMany(() => Players, (player) => player.categories)
+  @ManyToMany(() => Players, (player) => player.categories)
+  @JoinTable()
   players: Array<Players>;
 }

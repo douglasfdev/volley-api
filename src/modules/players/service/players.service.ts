@@ -20,7 +20,7 @@ export class PlayersService {
 
     await this.playersRepository.save(createdPlayer);
 
-    const { id, email, cellphone, name, ...player } = createdPlayer;
+    const { id, email, cellphone, name } = createdPlayer;
 
     return {
       id,
@@ -33,10 +33,23 @@ export class PlayersService {
   public async findAll(): Promise<Array<Players>> {
     return this.playersRepository.find({
       select: {
+        id: true,
         name: true,
-        email: true,
-        cellphone: true,
+        ranking: true,
+        rankingPosition: true,
+        events: {
+          id: true,
+          name: true,
+          operation: true,
+          value: true,
+        },
+        categories: {
+          id: true,
+          category: true,
+          description: true,
+        },
       },
+      relations: ['events', 'categories'],
     });
   }
 

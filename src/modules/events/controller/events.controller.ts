@@ -14,6 +14,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Categories } from 'src/modules/categories/entities/category.entity';
 
 @Controller({
   path: 'events',
@@ -35,10 +36,10 @@ export class EventsController {
     return this.eventsService.findAll();
   }
 
-  @Get(':id')
+  @Get('category/:id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id') id: string): Promise<Partial<Events>> {
-    return this.eventsService.findOne(id);
+  findOne(@Param('id') id: string): Promise<Partial<Array<Categories>>> {
+    return this.eventsService.listByCategories(id);
   }
 
   @Patch(':id')
