@@ -1,0 +1,332 @@
+{
+	"info": {
+		"_postman_id": "eeef714a-d709-4d37-9c7b-28f8dc8e1490",
+		"name": "Volley API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20301019",
+		"_collection_link": "https://red-capsule-413493.postman.co/workspace/Meu-Ambiente~bee9182d-9fd1-4f77-8318-9f2c61b3957e/collection/20301019-eeef714a-d709-4d37-9c7b-28f8dc8e1490?action=share&source=collection_link&creator=20301019"
+	},
+	"item": [
+		{
+			"name": "Players",
+			"item": [
+				{
+					"name": "CREATE PLAYER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cellphone\": \"+5511988889999\",\n    \"email\": \"coordenador@coordenador.com\",\n    \"name\": \"coordenador\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/v1/players",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE PLAYER",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/players/6a4c9fa9-3b20-4bdf-a19d-62c7280f183e",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"players",
+								"6a4c9fa9-3b20-4bdf-a19d-62c7280f183e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY EMAIL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/players/c4ae4edf-c382-4a88-b257-9437d74976ce",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"players",
+								"c4ae4edf-c382-4a88-b257-9437d74976ce"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "a@a.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL PLAYERS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/players/",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"players",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE PLAYER BY EMAIL",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cellphone\": \"+5511989999999\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/v1/players/b8568b4c-4572-451f-bfbe-7963995b867",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"players",
+								"b8568b4c-4572-451f-bfbe-7963995b867"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DOC",
+			"item": [
+				{
+					"name": "GET DOC",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/docs",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"docs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "GET ALL EVENTS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/events",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE EVENT",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"novo evento\",\n    \"players\": [\n        {\n            \"id\": \"f42dc4b5-50a7-4fd6-b4d8-6cb2f197d3d9\"\n        }\n    ],\n    \"categories\": [\n        {\n            \"id\": \"30052d13-4f3a-4700-b6e7-7f5bace0afae\"\n        },\n        {\n            \"id\": \"daa10892-7ef9-47b6-a67d-73bf5accffbe\"\n        },\n        {\n            \"id\": \"4076db5f-dc72-4a8b-9b6b-c505523f12e8\"\n        },\n        {\n            \"id\": \"1fe1138e-dfc6-4a37-abfb-47e60e4a305b\"\n        },\n        {\n            \"id\": \"d6cce545-9625-4ab7-a3aa-c4bd99e30076\"\n        }\n    ],\n    \"operation\": \"+\",\n    \"value\": 50\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/v1/events",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND BY CATEGORY",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/events/category/02ca6d51-0d15-485b-b44e-c6f53d7f99b4",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"events",
+								"category",
+								"02ca6d51-0d15-485b-b44e-c6f53d7f99b4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE TO DONE",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/events/2b252d01-4c16-4421-9b51-aefb0e319b63",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"events",
+								"2b252d01-4c16-4421-9b51-aefb0e319b63"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "GET ALL CATEGORIES",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/categories/",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"categories",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE CATEGORIES",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"category\": \"quinta categoria\",\n    \"description\": \"quinta descricao\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/v1/categories/",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"categories",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND BY EVENT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/categories/event/f42dc4b5-50a7-4fd6-b4d8-6cb2f197d3d9",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"categories",
+								"event",
+								"f42dc4b5-50a7-4fd6-b4d8-6cb2f197d3d9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

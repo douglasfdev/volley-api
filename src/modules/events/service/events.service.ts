@@ -23,11 +23,13 @@ export class EventsService {
   public async initEvent(createEventDto: CreateEventDto) {
     const event = new Events();
     event.name = createEventDto.name;
+    event.operation = createEventDto.operation;
     event.categories = createEventDto.categories;
+    event.value = createEventDto.value;
     event.players = createEventDto.players;
 
     const categoryId = event.categories.map((category) => category.id);
-    const playerId = event.players.map((player) => player.id);
+    //const playerId = event.players.map((player) => player.id);
 
     await this.categoriesRepository.update(categoryId, {
       status: CategoryEnumType.ACTIVE,
@@ -43,7 +45,7 @@ export class EventsService {
     return {
       id,
       name,
-      playerId,
+      //playerId,
       categoryId,
     };
   }

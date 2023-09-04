@@ -24,11 +24,11 @@ export class Events {
   @Column({ type: 'enum', enum: EventEnumType, default: EventEnumType.OPENNED })
   active: number;
 
-  @Column({ type: 'varchar', nullable: true })
-  operation?: string;
+  @Column({ type: 'varchar', nullable: false })
+  operation: string;
 
-  @Column({ type: 'integer', nullable: true })
-  value?: number;
+  @Column({ type: 'integer', nullable: false })
+  value: number;
 
   @CreateDateColumn({
     type: 'timestamp',
