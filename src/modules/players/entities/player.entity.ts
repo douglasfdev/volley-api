@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -13,6 +14,7 @@ import {
 @Entity('tb_players')
 export class Players {
   @PrimaryGeneratedColumn('uuid')
+  @Index('id_player_index', { unique: true })
   id?: string;
 
   @Column({ nullable: true })

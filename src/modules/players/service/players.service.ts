@@ -60,7 +60,7 @@ export class PlayersService {
     const player = await this.playersRepository.findOneBy({ id });
 
     if (!player) {
-      throw new NotFoundException(`Player with ${id} not found`);
+      throw new NotFoundException(`Player with id: ${id} not found`);
     }
 
     const { cellphone, name, email } = player;

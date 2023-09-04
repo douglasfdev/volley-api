@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { CategoryEnumType, EventEnumType } from 'src/enums';
 import { Players } from 'src/modules/players/entities/player.entity';
 import { Categories } from 'src/modules/categories/entities/category.entity';
+import { PlayersService } from 'src/modules/players/service/players.service';
 
 @Injectable()
 export class EventsService {
@@ -18,6 +19,7 @@ export class EventsService {
     private readonly playerRepository: Repository<Players>,
     @InjectRepository(Categories)
     private readonly categoriesRepository: Repository<Categories>,
+    private readonly playersService: PlayersService,
   ) {}
 
   public async initEvent(createEventDto: CreateEventDto) {
@@ -56,6 +58,8 @@ export class EventsService {
     const player = await this.playerRepository.findOneBy({
       id: params['playerId'],
     });
+
+    await this.playersService.findOne(params['playerId']);
 
     if (!event) {
       throw new NotFoundException(`Event ${params['event']} not found`);

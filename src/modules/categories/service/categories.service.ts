@@ -12,6 +12,7 @@ import { CategoryEnumType } from 'src/enums';
 import { Events } from 'src/modules/events/entities/event.entity';
 import { EventsService } from 'src/modules/events/service/events.service';
 import { Players } from 'src/modules/players/entities/player.entity';
+import { PlayersService } from 'src/modules/players/service/players.service';
 
 @Injectable()
 export class CategoriesService {
@@ -23,6 +24,7 @@ export class CategoriesService {
     private readonly eventService: EventsService,
     @InjectRepository(Players)
     private readonly playersRepository: Repository<Players>,
+    private readonly playersService: PlayersService,
   ) {}
 
   public async createCategoryWithEvent(createCategoryDto: CreateCategoryDto) {
@@ -77,6 +79,8 @@ export class CategoriesService {
     const findPlayer = await this.playersRepository.findOneBy({
       id: params['playerId'],
     });
+
+    await this.playersService.findOne(params['playerId']);
 
     if (!findCategory) {
       throw new NotFoundException(`Category ${category} not found`);

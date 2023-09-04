@@ -6,11 +6,12 @@ import { Categories } from './entities/category.entity';
 import { Events } from '../events/entities/event.entity';
 import { EventsService } from '../events/service/events.service';
 import { Players } from '../players/entities/player.entity';
+import { PlayersService } from '../players/service/players.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Categories, Events, Players])],
   controllers: [CategoriesController],
-  providers: [CategoriesService, EventsService],
+  providers: [CategoriesService, EventsService, PlayersService],
   exports: [CategoriesService],
 })
 export class CategoriesModule {}
