@@ -6,6 +6,7 @@ import { typeOrmAsyncConfig } from '@configs/typeorm.config';
 import { EventsModule } from './modules/events/events.module';
 import { PlayersModule } from './modules/players/players.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { ChallengesModule } from './modules/challenges/challenges.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 
@@ -20,6 +21,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
     EventsModule,
     PlayersModule,
     CategoriesModule,
+    ChallengesModule,
   ],
   controllers: [],
 })
