@@ -30,6 +30,15 @@ export class EventsController {
     return this.eventsService.initEvent(createEventDto);
   }
 
+  @Post(':event/player/:playerId')
+  @UsePipes(ValidationPipe)
+  @HttpCode(HttpStatus.CREATED)
+  insertEventIntoPlayer(
+    @Param() params: Array<string>,
+  ): Promise<Partial<Events>> {
+    return this.eventsService.insertEventIntoPlayer(params);
+  }
+
   @Get()
   @HttpCode(HttpStatus.OK)
   findAll(): Promise<Array<Events>> {

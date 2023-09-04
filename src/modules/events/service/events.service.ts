@@ -21,12 +21,9 @@ export class EventsService {
   ) {}
 
   public async initEvent(createEventDto: CreateEventDto) {
-    const event = new Events();
-    event.name = createEventDto.name;
-    event.operation = createEventDto.operation;
-    event.categories = createEventDto.categories;
-    event.value = createEventDto.value;
-    event.players = createEventDto.players;
+    const event = this.eventRepository.create({
+      ...createEventDto,
+    });
 
     const categoryId = event.categories.map((category) => category.id);
     //const playerId = event.players.map((player) => player.id);
@@ -37,6 +34,7 @@ export class EventsService {
 
     const savedEvent = await this.eventRepository.save({
       ...event,
+      categories: event.categories,
       active: EventEnumType.IN_PROGRESS,
     });
 
@@ -50,13 +48,41 @@ export class EventsService {
     };
   }
 
-  public async findAll(): Promise<Array<Events>> {
-    return this.eventRepository.find({
+  public async insertEventIntoPlayer(
+    params: Array<string>,
+  ): Promise<Partial<Events>> {
+    const name = params['event'];
+    const event = await this.eventRepository.findOne({ where: { name } });
+    const player = await this.playerRepository.findOneBy({
+      id: params['playerId'],
+    });
+
+    if (!event) {
+      throw new NotFoundException(`Event ${params['event']} not found`);
+    }
+
+    if (!player) {
+      throw new NotFoundException(`Player ${params['playerId']} not found`);
+    }
+
+    const createdEvent = this.eventRepository.create({
+      ...event,
+      players: [player],
+    });
+
+    await this.eventRepository.save(createdEvent);
+
+    const { id } = createdEvent;
+
+    return this.eventRepository.findOne({
       select: {
         id: true,
         name: true,
+        operation: true,
+        value: true,
         players: {
           id: true,
+          name: true,
           ranking: true,
           rankingPosition: true,
         },
@@ -64,6 +90,31 @@ export class EventsService {
           id: true,
           category: true,
           description: true,
+          status: true,
+        },
+      },
+      relations: ['players', 'categories'],
+      where: { id },
+    });
+  }
+
+  public async findAll(): Promise<Array<Events>> {
+    return this.eventRepository.find({
+      select: {
+        id: true,
+        name: true,
+        players: {
+          id: true,
+          name: true,
+          email: true,
+          ranking: true,
+          rankingPosition: true,
+        },
+        categories: {
+          id: true,
+          category: true,
+          description: true,
+          status: true,
         },
       },
       relations: ['players', 'categories'],

@@ -17,7 +17,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cellphone\": \"+5511988889999\",\n    \"email\": \"coordenador@coordenador.com\",\n    \"name\": \"coordenador\"\n}",
+							"raw": "{\n    \"cellphone\": \"+5511988889999\",\n    \"email\": \"admin@admin.com\",\n    \"name\": \"admin\",\n    \"ranking\": \"0\",\n    \"rankingPosition\": 0\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -189,7 +189,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\" : \"novo evento\",\n    \"players\": [\n        {\n            \"id\": \"f42dc4b5-50a7-4fd6-b4d8-6cb2f197d3d9\"\n        }\n    ],\n    \"categories\": [\n        {\n            \"id\": \"30052d13-4f3a-4700-b6e7-7f5bace0afae\"\n        },\n        {\n            \"id\": \"daa10892-7ef9-47b6-a67d-73bf5accffbe\"\n        },\n        {\n            \"id\": \"4076db5f-dc72-4a8b-9b6b-c505523f12e8\"\n        },\n        {\n            \"id\": \"1fe1138e-dfc6-4a37-abfb-47e60e4a305b\"\n        },\n        {\n            \"id\": \"d6cce545-9625-4ab7-a3aa-c4bd99e30076\"\n        }\n    ],\n    \"operation\": \"+\",\n    \"value\": 50\n}",
+							"raw": "{\n    \"name\" : \"novo evento\",\n    \"operation\": \"+\",\n    \"value\": 50,\n    \"players\": [\n        {\n            \"id\": \"f42dc4b5-50a7-4fd6-b4d8-6cb2f197d3d9\"\n        }\n    ],\n    \"categories\": [\n        {\n            \"id\": \"fe81aff3-3bd2-4730-874b-b3fe5e3ecd8c\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -205,6 +205,28 @@
 							"path": [
 								"v1",
 								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ASSOCIATE EVENT TO PLAYER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/events/MITSUI/player/443ce278-84c8-4b3c-b94f-9b47e7da7e29",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"events",
+								"MITSUI",
+								"player",
+								"443ce278-84c8-4b3c-b94f-9b47e7da7e29"
 							]
 						}
 					},
@@ -257,10 +279,19 @@
 			"name": "Categories",
 			"item": [
 				{
-					"name": "GET ALL CATEGORIES",
+					"name": "CREATE CATEGORIES",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"category\": \"movida\",\n    \"description\": \"VAMO\",\n    \"events\": [\n        {\n            \"name\" : \"PORTO\",\n            \"operation\": \"+\",\n            \"value\": 10\n        },\n        {\n            \"name\" : \"MITSUI\",\n            \"operation\": \"+\",\n            \"value\": 50\n        },\n        {\n            \"name\" : \"COMBO\",\n            \"operation\": \"+\",\n            \"value\": 0\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:5000/v1/categories/",
 							"host": [
@@ -271,25 +302,45 @@
 								"v1",
 								"categories",
 								""
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": null,
+									"disabled": true
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "CREATE CATEGORIES",
+					"name": "ASSOCIATE CATEGORY TO PLAYER",
 					"request": {
 						"method": "POST",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"category\": \"quinta categoria\",\n    \"description\": \"quinta descricao\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
+						"url": {
+							"raw": "localhost:5000/v1/categories/dark mont/player/88d1e6a5-4a8f-4537-93d0-d595e81b6d0d",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"categories",
+								"dark mont",
+								"player",
+								"88d1e6a5-4a8f-4537-93d0-d595e81b6d0d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL CATEGORIES",
+					"request": {
+						"method": "GET",
+						"header": [],
 						"url": {
 							"raw": "localhost:5000/v1/categories/",
 							"host": [
@@ -321,6 +372,26 @@
 								"categories",
 								"event",
 								"f42dc4b5-50a7-4fd6-b4d8-6cb2f197d3d9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND ONE CATEGORY",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/categories/0105af16-0bd9-46d6-9b0a-45578243c70b",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"categories",
+								"0105af16-0bd9-46d6-9b0a-45578243c70b"
 							]
 						}
 					},

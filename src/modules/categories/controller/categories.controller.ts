@@ -27,7 +27,14 @@ export class CategoriesController {
   create(
     @Body() createCategoryDto: CreateCategoryDto,
   ): Promise<Partial<Categories>> {
-    return this.categoriesService.create(createCategoryDto);
+    return this.categoriesService.createCategoryWithEvent(createCategoryDto);
+  }
+
+  @Post(':category/player/:playerId')
+  insertCategoryIntoPlayers(
+    @Param() params: Array<string>,
+  ): Promise<Categories> {
+    return this.categoriesService.insertCategoryIntoPlayer(params);
   }
 
   @Get()
@@ -40,7 +47,13 @@ export class CategoriesController {
     return this.categoriesService.findByEvents(id);
   }
 
+  @Get(':id')
+  findOneById(@Param('id') id: string): Promise<Categories> {
+    return this.categoriesService.findOneCategory(id);
+  }
+
   @Patch(':id')
+  @UsePipes(ValidationPipe)
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,

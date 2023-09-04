@@ -20,13 +20,16 @@ export class PlayersService {
 
     await this.playersRepository.save(createdPlayer);
 
-    const { id, email, cellphone, name } = createdPlayer;
+    const { id, email, cellphone, name, ranking, rankingPosition } =
+      createdPlayer;
 
     return {
       id,
       email,
       cellphone,
       name,
+      ranking,
+      rankingPosition,
     };
   }
 
