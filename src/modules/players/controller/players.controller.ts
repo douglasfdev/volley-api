@@ -15,7 +15,7 @@ import {
   HttpStatus,
   Param,
 } from '@nestjs/common';
-import { PlayersValidationParametersPipe } from '../pipes/players.validation.parameters.pipe';
+import { ValidationParametersPipe } from '../../../common/pipes/validation.parameters.pipe';
 
 @Controller({
   path: 'players',
@@ -42,7 +42,7 @@ export class PlayersController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   findOne(
-    @Param('id', PlayersValidationParametersPipe) id: string,
+    @Param('id', ValidationParametersPipe) id: string,
   ): Promise<Partial<Players>> {
     return this.playersService.findOne(id);
   }
@@ -50,7 +50,7 @@ export class PlayersController {
   @Patch(':id')
   @HttpCode(HttpStatus.ACCEPTED)
   update(
-    @Param('id', PlayersValidationParametersPipe) id: string,
+    @Param('id', ValidationParametersPipe) id: string,
     @Body() updatePlayerDto: UpdatePlayerDto,
   ): Promise<UpdatePlayerDto> {
     return this.playersService.update(id, updatePlayerDto);
@@ -58,9 +58,7 @@ export class PlayersController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(
-    @Param('id', PlayersValidationParametersPipe) id: string,
-  ): Promise<void> {
+  remove(@Param('id', ValidationParametersPipe) id: string): Promise<void> {
     return this.playersService.remove(id);
   }
 }

@@ -5,6 +5,8 @@ import { Players } from '../entities/player.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PlayerEnumType } from 'src/enums';
+import { PlayerIntoEventDto } from '../dto/associate-player-into-event.dto';
+import { EventsService } from 'src/modules/events/service/events.service';
 
 @Injectable()
 export class PlayersService {

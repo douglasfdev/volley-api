@@ -1,6 +1,6 @@
+import { ChallengesController } from './controller/challenges.controller';
+import { ChallengesService } from './service/challenges.service';
 import { Module } from '@nestjs/common';
-import { ChallengesService } from './challenges.service';
-import { ChallengesController } from './challenges.controller';
 
 @Module({
   controllers: [ChallengesController],

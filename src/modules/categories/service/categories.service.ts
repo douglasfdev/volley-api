@@ -1,5 +1,5 @@
-import { UpdateCategoryDto } from '../dto/update-category.dto';
-import { CreateCategoryDto } from '../dto/create-category.dto';
+import { UpdateCategoryDto } from '../dtos/update-category.dto';
+import { CreateCategoryDto } from '../dtos/create-category.dto';
 import {
   BadRequestException,
   Injectable,
@@ -13,6 +13,7 @@ import { Events } from 'src/modules/events/entities/event.entity';
 import { EventsService } from 'src/modules/events/service/events.service';
 import { Players } from 'src/modules/players/entities/player.entity';
 import { PlayersService } from 'src/modules/players/service/players.service';
+import { InsertCategoryIntoPlayerDto } from '../dtos/insert-category-into-player.do';
 
 @Injectable()
 export class CategoriesService {
@@ -27,11 +28,13 @@ export class CategoriesService {
     private readonly playersService: PlayersService,
   ) {}
 
-  public async createCategoryWithEvent(createCategoryDto: CreateCategoryDto) {
+  public async createCategoryWithEvent(
+    createCategoryDto: CreateCategoryDto,
+  ): Promise<Partial<Categories>> {
     const { category } = createCategoryDto;
 
-    const categoryExists = await this.categoriesRepository.findOne({
-      where: { category },
+    const categoryExists = await this.categoriesRepository.findOneBy({
+      category,
     });
 
     if (categoryExists) {
@@ -45,9 +48,10 @@ export class CategoriesService {
     const savedCategory = await this.categoriesRepository.save({
       ...categories,
       events: categories.events,
+      players: categories.players,
     });
 
-    const { id, description, events } = savedCategory;
+    const { id, description, events, players } = savedCategory;
 
     categories.events.map(async (event) => {
       const initEvent = await this.eventService.initEvent({
@@ -55,6 +59,7 @@ export class CategoriesService {
         operation: event.operation,
         value: event.value,
         categories: [savedCategory],
+        players,
       });
 
       await this.eventsRepository.save(initEvent);
@@ -65,34 +70,35 @@ export class CategoriesService {
       category,
       description,
       events,
+      players,
     };
   }
 
   public async insertCategoryIntoPlayer(
-    params: Array<string>,
+    insertCategoryIntoPlayerDto: InsertCategoryIntoPlayerDto,
   ): Promise<Categories> {
-    const category: string = params['category'];
-    const findCategory = await this.categoriesRepository.findOne({
-      where: { category },
+    const { category, players } = insertCategoryIntoPlayerDto;
+    const findCategory = await this.categoriesRepository.findOneBy({
+      category,
     });
 
-    const findPlayer = await this.playersRepository.findOneBy({
-      id: params['playerId'],
+    const users = insertCategoryIntoPlayerDto.players.map((player) => {
+      return this.playersService.findOne(player.id);
     });
 
-    await this.playersService.findOne(params['playerId']);
-
-    if (!findCategory) {
-      throw new NotFoundException(`Category ${category} not found`);
+    if (!users) {
+      throw new NotFoundException(`Player not found`);
     }
 
-    if (!findPlayer) {
-      throw new NotFoundException(`Player ${params['playerId']} not found`);
+    if (!findCategory) {
+      throw new NotFoundException(
+        `Category ${insertCategoryIntoPlayerDto.category} not found`,
+      );
     }
 
     const createdCategory = this.categoriesRepository.create({
       ...findCategory,
-      players: [findPlayer],
+      players,
     });
 
     await this.categoriesRepository.save(createdCategory);
@@ -145,7 +151,7 @@ export class CategoriesService {
     });
   }
 
-  public async findByEvents(id: string) {
+  public async findByEvents(id: string): Promise<Array<Events>> {
     return this.eventsRepository.find({
       select: {
         id: true,

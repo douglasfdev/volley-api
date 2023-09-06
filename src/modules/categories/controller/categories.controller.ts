@@ -1,5 +1,5 @@
-import { UpdateCategoryDto } from './../dto/update-category.dto';
-import { CreateCategoryDto } from './../dto/create-category.dto';
+import { UpdateCategoryDto } from '../dtos/update-category.dto';
+import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { CategoriesService } from '../service/categories.service';
 import {
   Controller,
@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { Categories } from '../entities/category.entity';
 import { Events } from 'src/modules/events/entities/event.entity';
+import { InsertCategoryIntoPlayerDto } from '../dtos/insert-category-into-player.do';
 
 @Controller({
   path: 'categories',
@@ -30,11 +31,13 @@ export class CategoriesController {
     return this.categoriesService.createCategoryWithEvent(createCategoryDto);
   }
 
-  @Post(':category/player/:playerId')
+  @Post('player/')
   insertCategoryIntoPlayers(
-    @Param() params: Array<string>,
+    @Body() insertCategoryIntoPlayerDto: InsertCategoryIntoPlayerDto,
   ): Promise<Categories> {
-    return this.categoriesService.insertCategoryIntoPlayer(params);
+    return this.categoriesService.insertCategoryIntoPlayer(
+      insertCategoryIntoPlayerDto,
+    );
   }
 
   @Get()

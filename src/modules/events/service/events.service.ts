@@ -28,7 +28,7 @@ export class EventsService {
     });
 
     const categoryId = event.categories.map((category) => category.id);
-    //const playerId = event.players.map((player) => player.id);
+    const playerId = event.players.map((player) => player.id);
 
     await this.categoriesRepository.update(categoryId, {
       status: CategoryEnumType.ACTIVE,
@@ -45,7 +45,7 @@ export class EventsService {
     return {
       id,
       name,
-      //playerId,
+      playerId,
       categoryId,
     };
   }
@@ -123,6 +123,36 @@ export class EventsService {
       },
       relations: ['players', 'categories'],
     });
+  }
+
+  public async findOne(id: string): Promise<Events> {
+    const event = await this.eventRepository.findOne({
+      select: {
+        id: true,
+        name: true,
+        players: {
+          id: true,
+          name: true,
+          email: true,
+          ranking: true,
+          rankingPosition: true,
+        },
+        categories: {
+          id: true,
+          category: true,
+          description: true,
+          status: true,
+        },
+      },
+      relations: ['players', 'categories'],
+      where: { id },
+    });
+
+    if (!event) {
+      throw new NotFoundException(`Event ${id} not found`);
+    }
+
+    return event;
   }
 
   public async listByCategories(
