@@ -14,7 +14,6 @@ import {
 } from '@nestjs/common';
 import { Categories } from '../entities/category.entity';
 import { Events } from 'src/modules/events/entities/event.entity';
-import { InsertCategoryIntoPlayerDto } from '../dtos/insert-category-into-player.do';
 
 @Controller({
   path: 'categories',
@@ -31,13 +30,11 @@ export class CategoriesController {
     return this.categoriesService.createCategoryWithEvent(createCategoryDto);
   }
 
-  @Post('player/')
+  @Post(':category/player/:playerId')
   insertCategoryIntoPlayers(
-    @Body() insertCategoryIntoPlayerDto: InsertCategoryIntoPlayerDto,
+    @Param() params: Array<string>,
   ): Promise<Categories> {
-    return this.categoriesService.insertCategoryIntoPlayer(
-      insertCategoryIntoPlayerDto,
-    );
+    return this.categoriesService.insertCategoryIntoPlayer(params);
   }
 
   @Get()

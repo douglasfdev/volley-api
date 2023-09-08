@@ -58,7 +58,7 @@ export class PlayersService {
     });
   }
 
-  public async findOne(id: string): Promise<Partial<Players>> {
+  public async findOne(id: string): Promise<Players> {
     const player = await this.playersRepository.findOneBy({ id });
 
     if (!player) {
@@ -71,6 +71,10 @@ export class PlayersService {
       email,
       cellphone,
       name,
+      categories: null,
+      events: null,
+      ranking: null,
+      rankingPosition: null,
     };
   }
 

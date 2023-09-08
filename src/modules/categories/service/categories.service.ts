@@ -13,7 +13,6 @@ import { Events } from 'src/modules/events/entities/event.entity';
 import { EventsService } from 'src/modules/events/service/events.service';
 import { Players } from 'src/modules/players/entities/player.entity';
 import { PlayersService } from 'src/modules/players/service/players.service';
-import { InsertCategoryIntoPlayerDto } from '../dtos/insert-category-into-player.do';
 
 @Injectable()
 export class CategoriesService {
@@ -48,7 +47,6 @@ export class CategoriesService {
     const savedCategory = await this.categoriesRepository.save({
       ...categories,
       events: categories.events,
-      players: categories.players,
     });
 
     const { id, description, events, players } = savedCategory;
@@ -75,35 +73,38 @@ export class CategoriesService {
   }
 
   public async insertCategoryIntoPlayer(
-    insertCategoryIntoPlayerDto: InsertCategoryIntoPlayerDto,
+    params: Array<string>,
   ): Promise<Categories> {
-    const { category, players } = insertCategoryIntoPlayerDto;
-    const findCategory = await this.categoriesRepository.findOneBy({
-      category,
+    const category = await this.categoriesRepository.findOne({
+      where: {
+        category: params['category'],
+      },
+      relations: {
+        players: true,
+      },
     });
 
-    const users = insertCategoryIntoPlayerDto.players.map((player) => {
-      return this.playersService.findOne(player.id);
+    const player = await this.playersRepository.findOneBy({
+      id: params['playerId'],
     });
 
-    if (!users) {
-      throw new NotFoundException(`Player not found`);
+    await this.playersService.findOne(params['playerId']);
+
+    if (!player) {
+      throw new NotFoundException(`Player with id ${params['playerId']} found`);
     }
 
-    if (!findCategory) {
-      throw new NotFoundException(
-        `Category ${insertCategoryIntoPlayerDto.category} not found`,
-      );
+    if (!category) {
+      throw new NotFoundException(`Category ${category} not found`);
     }
 
-    const createdCategory = this.categoriesRepository.create({
-      ...findCategory,
-      players,
+    category.players.push(player);
+
+    await this.categoriesRepository.save({
+      ...category,
     });
 
-    await this.categoriesRepository.save(createdCategory);
-
-    const { id } = createdCategory;
+    const { id } = category;
 
     return this.categoriesRepository.findOne({
       select: {

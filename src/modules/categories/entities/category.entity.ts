@@ -35,14 +35,14 @@ export class Categories {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @Column({ type: 'timestamp', default: null })
   deletedAt?: Date;

@@ -1,6 +1,11 @@
 import { Events } from './../entities/event.entity';
 import { CreateEventDto } from './../dto/create-event.dto';
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CategoryEnumType, EventEnumType } from 'src/enums';
@@ -50,11 +55,16 @@ export class EventsService {
     };
   }
 
-  public async insertEventIntoPlayer(
-    params: Array<string>,
-  ): Promise<Partial<Events>> {
-    const name = params['event'];
-    const event = await this.eventRepository.findOne({ where: { name } });
+  public async insertEventIntoPlayer(params: Array<string>): Promise<Events> {
+    const event = await this.eventRepository.findOne({
+      where: {
+        name: params['event'],
+      },
+      relations: {
+        players: true,
+      },
+    });
+
     const player = await this.playerRepository.findOneBy({
       id: params['playerId'],
     });
@@ -69,14 +79,26 @@ export class EventsService {
       throw new NotFoundException(`Player ${params['playerId']} not found`);
     }
 
-    const createdEvent = this.eventRepository.create({
-      ...event,
-      players: [player],
+    const playerAllreadyHasEvent = await this.playerRepository.findOne({
+      where: {
+        id: params['playerId'],
+        events: {
+          id: event.id,
+        },
+      },
     });
 
-    await this.eventRepository.save(createdEvent);
+    if (playerAllreadyHasEvent) {
+      throw new BadRequestException(
+        `Player ${player.name} already has in ${event.name} event`,
+      );
+    }
 
-    const { id } = createdEvent;
+    event.players.push(player);
+
+    await this.eventRepository.save({ ...event });
+
+    const { id } = event;
 
     return this.eventRepository.findOne({
       select: {

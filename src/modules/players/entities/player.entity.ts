@@ -18,19 +18,19 @@ export class Players {
   id?: string;
 
   @Column({ nullable: true })
-  cellphone?: string;
+  cellphone: string;
 
   @Column({ unique: true })
-  email?: string;
+  email: string;
 
-  @Column({ nullable: false })
+  @Column()
   name: string;
 
-  @Column({ nullable: true })
-  ranking?: string;
+  @Column()
+  ranking: string;
 
-  @Column({ nullable: true })
-  rankingPosition?: number;
+  @Column()
+  rankingPosition: number;
 
   @Column({ nullable: true })
   pictureUrlPlayer?: string;
@@ -46,14 +46,14 @@ export class Players {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @Column({ type: 'timestamp', default: null })
   deletedAt?: Date;
