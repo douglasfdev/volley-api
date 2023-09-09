@@ -10,14 +10,23 @@ import {
 } from '@nestjs/common';
 import { CreateChallengeDto } from '../dto/create-challenge.dto';
 import { UpdateChallengeDto } from '../dto/update-challenge.dto';
+import { Challenges } from '../entities/challenge.entity';
 
-@Controller('challenges')
+@Controller({
+  path: 'challenges',
+  version: '1',
+})
 export class ChallengesController {
   constructor(private readonly challengesService: ChallengesService) {}
 
   @Post()
-  create(@Body() createChallengeDto: CreateChallengeDto) {
+  create(@Body() createChallengeDto: CreateChallengeDto): Promise<Challenges> {
     return this.challengesService.create(createChallengeDto);
+  }
+
+  @Post(':challenged/accept/:requester/challenge/:challenge')
+  accept(@Param() params: Array<string>): Promise<Challenges> {
+    return this.challengesService.acceptChallenge(params);
   }
 
   @Get()

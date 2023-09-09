@@ -1,12 +1,16 @@
 import { Events } from 'src/modules/events/entities/event.entity';
 import { PlayerEnumType } from 'src/enums';
 import { Categories } from 'src/modules/categories/entities/category.entity';
+import { Challenges } from '../../challenges/entities/challenge.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
   ManyToMany,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -63,4 +67,12 @@ export class Players {
 
   @ManyToMany(() => Events, (events) => events.players)
   events: Array<Events>;
+
+  @OneToMany(() => Challenges, (challenge) => challenge.requester)
+  @JoinColumn({ name: 'requesterId' })
+  challenger: Array<Challenges>;
+
+  @ManyToOne(() => Challenges, (challenge) => challenge.challenged)
+  @JoinColumn({ name: 'challengedId' })
+  challengers: Challenges;
 }
