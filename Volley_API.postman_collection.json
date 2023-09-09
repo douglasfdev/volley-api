@@ -8,6 +8,30 @@
 	},
 	"item": [
 		{
+			"name": "DOC",
+			"item": [
+				{
+					"name": "GET DOC",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/docs",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"docs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Players",
 			"item": [
 				{
@@ -17,7 +41,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cellphone\": \"+5511988889999\",\n    \"email\": \"admin@admin.com\",\n    \"name\": \"admin\",\n    \"ranking\": \"0\",\n    \"rankingPosition\": 0\n}",
+							"raw": "{\n    \"cellphone\": \"+5511988889999\",\n    \"email\": \"xpto@xpto.com\",\n    \"name\": \"xpto\",\n    \"ranking\": \"0\",\n    \"rankingPosition\": 0\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -59,12 +83,12 @@
 					"response": []
 				},
 				{
-					"name": "GET BY EMAIL",
+					"name": "GET BY ID",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:5000/v1/players/c4ae4edf-c382-4a88-b257-9437d74976ce",
+							"raw": "localhost:5000/v1/players/443ce278-84c8-4b3c-b94f-9b47e7da7e29",
 							"host": [
 								"localhost"
 							],
@@ -72,7 +96,7 @@
 							"path": [
 								"v1",
 								"players",
-								"c4ae4edf-c382-4a88-b257-9437d74976ce"
+								"443ce278-84c8-4b3c-b94f-9b47e7da7e29"
 							],
 							"query": [
 								{
@@ -137,30 +161,6 @@
 			]
 		},
 		{
-			"name": "DOC",
-			"item": [
-				{
-					"name": "GET DOC",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:5000/v1/docs",
-							"host": [
-								"localhost"
-							],
-							"port": "5000",
-							"path": [
-								"v1",
-								"docs"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Events",
 			"item": [
 				{
@@ -189,7 +189,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\" : \"novo evento\",\n    \"operation\": \"+\",\n    \"value\": 50,\n    \"players\": [\n        {\n            \"id\": \"f42dc4b5-50a7-4fd6-b4d8-6cb2f197d3d9\"\n        }\n    ],\n    \"categories\": [\n        {\n            \"id\": \"fe81aff3-3bd2-4730-874b-b3fe5e3ecd8c\"\n        }\n    ]\n}",
+							"raw": "{\n    \"name\" : \"Evento1\",\n    \"operation\": \"+\",\n    \"value\": 50\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -216,7 +216,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:5000/v1/events/MITSUI/player/443ce278-84c8-4b3c-b94f-9b47e7da7e29",
+							"raw": "localhost:5000/v1/events/Mais um evento/player/a61a363f-7700-4395-bd11-69a7074bf304",
 							"host": [
 								"localhost"
 							],
@@ -224,9 +224,31 @@
 							"path": [
 								"v1",
 								"events",
-								"MITSUI",
+								"Mais um evento",
 								"player",
-								"443ce278-84c8-4b3c-b94f-9b47e7da7e29"
+								"a61a363f-7700-4395-bd11-69a7074bf304"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ASSOCIATE EVENT TO CATEGORY",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/events/Evento1/category/5993ff97-e8d0-42ec-8391-4139727ca2e0",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"events",
+								"Evento1",
+								"category",
+								"5993ff97-e8d0-42ec-8391-4139727ca2e0"
 							]
 						}
 					},
@@ -285,7 +307,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"category\": \"movida\",\n    \"description\": \"VAMO\",\n    \"events\": [\n        {\n            \"name\" : \"PORTO\",\n            \"operation\": \"+\",\n            \"value\": 10\n        },\n        {\n            \"name\" : \"MITSUI\",\n            \"operation\": \"+\",\n            \"value\": 50\n        },\n        {\n            \"name\" : \"COMBO\",\n            \"operation\": \"+\",\n            \"value\": 0\n        }\n    ]\n}",
+							"raw": "{\n    \"category\": \"MOVIDA\",\n    \"description\": \"BORA\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -320,7 +342,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:5000/v1/categories/dark mont/player/88d1e6a5-4a8f-4537-93d0-d595e81b6d0d",
+							"raw": "localhost:5000/v1/categories/MOVIDA/player/a61a363f-7700-4395-bd11-69a7074bf304",
 							"host": [
 								"localhost"
 							],
@@ -328,9 +350,9 @@
 							"path": [
 								"v1",
 								"categories",
-								"dark mont",
+								"MOVIDA",
 								"player",
-								"88d1e6a5-4a8f-4537-93d0-d595e81b6d0d"
+								"a61a363f-7700-4395-bd11-69a7074bf304"
 							]
 						}
 					},
@@ -383,7 +405,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:5000/v1/categories/0105af16-0bd9-46d6-9b0a-45578243c70b",
+							"raw": "localhost:5000/v1/categories/0105af16-0bd9-46d6-9b0a-455782a43c70b",
 							"host": [
 								"localhost"
 							],
@@ -391,7 +413,65 @@
 							"path": [
 								"v1",
 								"categories",
-								"0105af16-0bd9-46d6-9b0a-45578243c70b"
+								"0105af16-0bd9-46d6-9b0a-455782a43c70b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Challenges",
+			"item": [
+				{
+					"name": "CRIAR DESAFIO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"challengeDateTime\": \"2023-09-09 14:14:15.309\",\n    \"requester\": {\n        \"id\": \"a61a363f-7700-4395-bd11-69a7074bf304\"\n    },\n    \"challenged\": [\n        {\n            \"id\": \"962ef47f-46cc-4956-bd77-2809c83eaac9\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:5000/v1/challenges/",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"challenges",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ACEITAR DESAFIO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:5000/v1/challenges/a61a363f-7700-4395-bd11-69a7074bf304/accept/962ef47f-46cc-4956-bd77-2809c83eaac9/challenge/73816e21-c491-47c5-bfb1-13c76118484b",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"v1",
+								"challenges",
+								"a61a363f-7700-4395-bd11-69a7074bf304",
+								"accept",
+								"962ef47f-46cc-4956-bd77-2809c83eaac9",
+								"challenge",
+								"73816e21-c491-47c5-bfb1-13c76118484b"
 							]
 						}
 					},
