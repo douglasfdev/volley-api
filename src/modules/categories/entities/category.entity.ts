@@ -19,6 +19,7 @@ export class Categories {
   id?: string;
 
   @Column()
+  @Index('name_category_index', { unique: true })
   category: string;
 
   @Column()
@@ -35,17 +36,17 @@ export class Categories {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  createdAt?: Date;
+  created_at?: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
-  updatedAt?: Date;
+  updated_at?: Date;
 
   @Column({ type: 'timestamp', default: null })
-  deletedAt?: Date;
+  deleted_at?: Date;
 
   @ManyToMany(() => Events, (event) => event.categories)
   events: Array<Events>;

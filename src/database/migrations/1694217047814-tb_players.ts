@@ -1,32 +1,46 @@
+import { PlayerEnumType } from 'src/enums';
 import {
   MigrationInterface,
   QueryRunner,
   Table,
-  TableColumn,
   TableForeignKey,
   TableIndex,
 } from 'typeorm';
 
-export class TbVoleyball1693084154892 implements MigrationInterface {
+export class TbPlayers1694217047814 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'tb_voleyball',
+        name: 'tb_players',
         columns: [
           {
             name: 'id',
             type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid',
-            default: `uuid_generate_v4()`,
+            default: 'uuid_generate_v4()',
           },
           {
-            name: 'category',
+            name: 'name',
             type: 'varchar',
           },
           {
-            name: 'description',
+            name: 'email',
             type: 'varchar',
+          },
+          {
+            name: 'rankingPosition',
+            type: 'varchar',
+          },
+          {
+            name: 'picturePlayer',
+            type: 'varchar',
+          },
+          {
+            name: 'status',
+            type: 'enum',
+            default: PlayerEnumType.ACTIVE,
+            enum: ['0', '1'],
           },
           {
             name: 'created_at',
@@ -49,41 +63,33 @@ export class TbVoleyball1693084154892 implements MigrationInterface {
     );
 
     await queryRunner.createIndex(
-      'tb_voleyball',
+      'tb_players',
       new TableIndex({
-        name: 'IDX_tb_voleyball_id',
+        name: 'IDX_tb_players_id',
         columnNames: ['id'],
       }),
     );
 
-    await queryRunner.addColumn(
-      'tb_voleyball',
-      new TableColumn({
-        name: 'eventsId',
-        type: 'uuid',
-      }),
-    );
-
     await queryRunner.createForeignKey(
-      'tb_voleyball',
+      'tb_players',
       new TableForeignKey({
-        columnNames: ['eventsId'],
-        referencedTableName: 'tb_events',
+        columnNames: ['eventId'],
         referencedColumnNames: ['id'],
+        referencedTableName: 'tb_events',
         onDelete: 'CASCADE',
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const table = await queryRunner.getTable('tb_voleyball');
+    const table = await queryRunner.getTable('tb_players');
     const foreignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('eventsId') !== -1,
+      (fk) => fk.columnNames.indexOf('eventId') !== -1,
     );
 
-    await queryRunner.dropForeignKey('tb_voleyball', foreignKey);
-    await queryRunner.dropColumn('tb_voleyball', 'id');
-    await queryRunner.dropIndex('tb_voleyball', 'IDX_tb_voleyball_id');
-    await queryRunner.dropTable('tb_voleyball');
+    await queryRunner.dropForeignKey('tb_players', foreignKey);
+    await queryRunner.dropColumn('tb_players', 'event_id');
+    await queryRunner.dropIndex('tb_players', 'IDX_tb_players_id');
+    await queryRunner.dropTable('tb_players');
   }
 }

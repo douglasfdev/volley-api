@@ -18,23 +18,24 @@ export class Events {
   @Index('id_events_index', { unique: true })
   id?: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
+  @Index('name_events_index', { unique: true })
   name: string;
 
   @Column({ type: 'enum', enum: EventEnumType, default: EventEnumType.OPENNED })
   active: number;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar' })
   operation: string;
 
-  @Column({ type: 'integer', nullable: false })
+  @Column({ type: 'integer' })
   value: number;
 
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  createdAt?: Date;
+  created_at?: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',

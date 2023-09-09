@@ -227,7 +227,7 @@ export class CategoriesService {
 
     await this.categoriesRepository.update(id, {
       status: CategoryEnumType.INACTIVE,
-      deletedAt: new Date(),
+      deleted_at: new Date(),
     });
   }
 }

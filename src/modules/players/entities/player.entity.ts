@@ -46,17 +46,17 @@ export class Players {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  createdAt?: Date;
+  created_at?: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
-  updatedAt?: Date;
+  updated_at?: Date;
 
   @Column({ type: 'timestamp', default: null })
-  deletedAt?: Date;
+  deleted_at?: Date;
 
   @ManyToMany(() => Categories, (categories) => categories.players)
   categories: Array<Categories>;

@@ -25,12 +25,16 @@ export class TbEvents1693085708630 implements MigrationInterface {
             type: 'varchar',
           },
           {
+            name: 'active',
+            type: 'int',
+          },
+          {
             name: 'operation',
             type: 'varchar',
           },
           {
             name: 'value',
-            type: 'numeric',
+            type: 'int',
           },
           {
             name: 'created_at',
@@ -60,20 +64,20 @@ export class TbEvents1693085708630 implements MigrationInterface {
       }),
     );
 
-    await queryRunner.addColumn(
+    await queryRunner.createIndex(
       'tb_events',
-      new TableColumn({
-        name: 'voleyballId',
-        type: 'uuid',
+      new TableIndex({
+        name: 'IDX_tb_events_name',
+        columnNames: ['name'],
       }),
     );
 
     await queryRunner.createForeignKey(
       'tb_events',
       new TableForeignKey({
-        columnNames: ['voleyballId'],
+        columnNames: ['playerId'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'tb_voleyball',
+        referencedTableName: 'tb_players',
         onDelete: 'CASCADE',
       }),
     );
@@ -82,7 +86,7 @@ export class TbEvents1693085708630 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     const table = await queryRunner.getTable('tb_events');
     const foreignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('voleyballId') !== -1,
+      (fk) => fk.columnNames.indexOf('playerId') !== -1,
     );
 
     await queryRunner.dropForeignKey('tb_event', foreignKey);

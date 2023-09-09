@@ -91,7 +91,7 @@ export class PlayersService {
     this.playersRepository.update(id, {
       ...updatePlayerDto,
       status: PlayerEnumType.ACTIVE,
-      deletedAt: null,
+      deleted_at: null,
     });
 
     const { cellphone, name, email } = player;
@@ -112,7 +112,7 @@ export class PlayersService {
 
     await this.playersRepository.update(id, {
       status: PlayerEnumType.INACTIVE,
-      deletedAt: new Date(),
+      deleted_at: new Date(),
     });
   }
 }
