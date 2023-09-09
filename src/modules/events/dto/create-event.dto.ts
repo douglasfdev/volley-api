@@ -1,19 +1,9 @@
-import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { Categories } from 'src/modules/categories/entities/category.entity';
-import { Players } from 'src/modules/players/entities/player.entity';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateEventDto {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
-
-  @IsNotEmpty()
-  @IsArray()
-  readonly players?: Array<Players>;
-
-  @IsNotEmpty()
-  @IsArray()
-  readonly categories?: Array<Categories>;
 
   @IsString()
   @IsNotEmpty()

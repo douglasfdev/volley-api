@@ -39,6 +39,11 @@ export class EventsController {
     return this.eventsService.insertEventIntoPlayer(params);
   }
 
+  @Post(':event/category/:categoryId')
+  insertEventIntoCategory(@Param() params: Array<string>): Promise<Events> {
+    return this.eventsService.insertEventIntoCategory(params);
+  }
+
   @Get()
   @HttpCode(HttpStatus.OK)
   findAll(): Promise<Array<Events>> {

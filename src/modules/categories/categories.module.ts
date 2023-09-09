@@ -7,6 +7,8 @@ import { Events } from '../events/entities/event.entity';
 import { EventsService } from '../events/service/events.service';
 import { Players } from '../players/entities/player.entity';
 import { PlayersService } from '../players/service/players.service';
+import { PlayersModule } from '../players/players.module';
+import { EventsModule } from '../events/events.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Categories, Events, Players])],

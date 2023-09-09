@@ -5,8 +5,6 @@ import { Players } from '../entities/player.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PlayerEnumType } from 'src/enums';
-import { PlayerIntoEventDto } from '../dto/associate-player-into-event.dto';
-import { EventsService } from 'src/modules/events/service/events.service';
 
 @Injectable()
 export class PlayersService {
@@ -65,17 +63,16 @@ export class PlayersService {
       throw new NotFoundException(`Player with id: ${id} not found`);
     }
 
-    const { cellphone, name, email } = player;
-
-    return {
-      email,
-      cellphone,
-      name,
-      categories: null,
-      events: null,
-      ranking: null,
-      rankingPosition: null,
-    };
+    return this.playersRepository.findOne({
+      select: {
+        cellphone: true,
+        name: true,
+        email: true,
+        ranking: true,
+        rankingPosition: true,
+      },
+      where: { id },
+    });
   }
 
   public async update(

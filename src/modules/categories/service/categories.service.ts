@@ -10,7 +10,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoryEnumType } from 'src/enums';
 import { Events } from 'src/modules/events/entities/event.entity';
-import { EventsService } from 'src/modules/events/service/events.service';
 import { Players } from 'src/modules/players/entities/player.entity';
 import { PlayersService } from 'src/modules/players/service/players.service';
 
@@ -21,15 +20,14 @@ export class CategoriesService {
     private readonly categoriesRepository: Repository<Categories>,
     @InjectRepository(Events)
     private readonly eventsRepository: Repository<Events>,
-    private readonly eventService: EventsService,
     @InjectRepository(Players)
     private readonly playersRepository: Repository<Players>,
     private readonly playersService: PlayersService,
   ) {}
 
-  public async createCategoryWithEvent(
+  public async createCategory(
     createCategoryDto: CreateCategoryDto,
-  ): Promise<Partial<Categories>> {
+  ): Promise<Categories> {
     const { category } = createCategoryDto;
 
     const categoryExists = await this.categoriesRepository.findOneBy({
@@ -49,27 +47,15 @@ export class CategoriesService {
       events: categories.events,
     });
 
-    const { id, description, events, players } = savedCategory;
+    const { id } = savedCategory;
 
-    categories.events.map(async (event) => {
-      const initEvent = await this.eventService.initEvent({
-        name: event.name,
-        operation: event.operation,
-        value: event.value,
-        categories: [savedCategory],
-        players,
-      });
-
-      await this.eventsRepository.save(initEvent);
+    return this.categoriesRepository.findOne({
+      select: {
+        id: true,
+        category: true,
+      },
+      where: { id },
     });
-
-    return {
-      id,
-      category,
-      description,
-      events,
-      players,
-    };
   }
 
   public async insertCategoryIntoPlayer(
@@ -84,18 +70,29 @@ export class CategoriesService {
       },
     });
 
+    if (!category) {
+      throw new NotFoundException(`Category ${category} not found`);
+    }
+
+    await this.playersService.findOne(params['playerId']);
+
     const player = await this.playersRepository.findOneBy({
       id: params['playerId'],
     });
 
-    await this.playersService.findOne(params['playerId']);
+    const playerAllreadyHasCategory = await this.playersRepository.findOne({
+      where: {
+        id: params['playerId'],
+        categories: {
+          id: category.id,
+        },
+      },
+    });
 
-    if (!player) {
-      throw new NotFoundException(`Player with id ${params['playerId']} found`);
-    }
-
-    if (!category) {
-      throw new NotFoundException(`Category ${category} not found`);
+    if (playerAllreadyHasCategory) {
+      throw new BadRequestException(
+        `Player ${player.name} already has in ${category.category} category`,
+      );
     }
 
     category.players.push(player);
@@ -156,6 +153,9 @@ export class CategoriesService {
     return this.eventsRepository.find({
       select: {
         id: true,
+        name: true,
+        value: true,
+        operation: true,
         players: {
           id: true,
           ranking: true,
@@ -169,6 +169,30 @@ export class CategoriesService {
       },
       where: { id },
       relations: ['categories', 'players'],
+    });
+  }
+
+  public async findOne(id: string): Promise<Categories> {
+    return this.categoriesRepository.findOne({
+      select: {
+        id: true,
+        category: true,
+        description: true,
+        events: {
+          id: true,
+          name: true,
+          operation: true,
+          value: true,
+        },
+        players: {
+          id: true,
+          name: true,
+          ranking: true,
+          rankingPosition: true,
+        },
+      },
+      where: { id },
+      relations: ['events', 'players'],
     });
   }
 

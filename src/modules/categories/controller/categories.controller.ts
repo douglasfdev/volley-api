@@ -24,10 +24,8 @@ export class CategoriesController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  create(
-    @Body() createCategoryDto: CreateCategoryDto,
-  ): Promise<Partial<Categories>> {
-    return this.categoriesService.createCategoryWithEvent(createCategoryDto);
+  create(@Body() createCategoryDto: CreateCategoryDto): Promise<Categories> {
+    return this.categoriesService.createCategory(createCategoryDto);
   }
 
   @Post(':category/player/:playerId')

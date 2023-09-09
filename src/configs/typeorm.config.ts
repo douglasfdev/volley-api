@@ -17,7 +17,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       password: config.get('POSTGRES_PASSWORD'),
       entities: ['dist/src/modules/**/*.entity.js'],
       migrations: ['dist/src/database/migrations/*.js'],
-      synchronize: false, //never use true on production
+      synchronize: true, //never use true on production
     };
   },
 };

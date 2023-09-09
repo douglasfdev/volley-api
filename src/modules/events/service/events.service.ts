@@ -8,10 +8,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CategoryEnumType, EventEnumType } from 'src/enums';
+import { EventEnumType } from 'src/enums';
 import { Players } from 'src/modules/players/entities/player.entity';
 import { Categories } from 'src/modules/categories/entities/category.entity';
 import { PlayersService } from 'src/modules/players/service/players.service';
+import { CategoriesService } from 'src/modules/categories/service/categories.service';
 
 @Injectable()
 export class EventsService {
@@ -25,18 +26,12 @@ export class EventsService {
     @InjectRepository(Categories)
     private readonly categoriesRepository: Repository<Categories>,
     private readonly playersService: PlayersService,
+    private readonly categoryService: CategoriesService,
   ) {}
 
   public async initEvent(createEventDto: CreateEventDto) {
     const event = this.eventRepository.create({
       ...createEventDto,
-    });
-
-    const categoryId = event.categories.map((category) => category.id);
-    const playerId = event.players.map((player) => player.id);
-
-    await this.categoriesRepository.update(categoryId, {
-      status: CategoryEnumType.ACTIVE,
     });
 
     const savedEvent = await this.eventRepository.save({
@@ -45,13 +40,12 @@ export class EventsService {
       active: EventEnumType.IN_PROGRESS,
     });
 
-    const { id, name } = savedEvent;
+    const { id, name, operation } = savedEvent;
 
     return {
       id,
       name,
-      playerId,
-      categoryId,
+      operation,
     };
   }
 
@@ -65,19 +59,15 @@ export class EventsService {
       },
     });
 
-    const player = await this.playerRepository.findOneBy({
-      id: params['playerId'],
-    });
-
-    await this.playersService.findOne(params['playerId']);
-
     if (!event) {
       throw new NotFoundException(`Event ${params['event']} not found`);
     }
 
-    if (!player) {
-      throw new NotFoundException(`Player ${params['playerId']} not found`);
-    }
+    await this.playersService.findOne(params['playerId']);
+
+    const player = await this.playerRepository.findOneBy({
+      id: params['playerId'],
+    });
 
     const playerAllreadyHasEvent = await this.playerRepository.findOne({
       where: {
@@ -120,6 +110,70 @@ export class EventsService {
         },
       },
       relations: ['players', 'categories'],
+      where: { id },
+    });
+  }
+
+  public async insertEventIntoCategory(params: Array<string>): Promise<Events> {
+    const event = await this.eventRepository.findOne({
+      where: {
+        name: params['event'],
+      },
+      relations: {
+        categories: true,
+      },
+    });
+
+    if (!event) {
+      throw new NotFoundException(`Event ${params['event']} not found`);
+    }
+
+    await this.categoryService.findOne(params['categoryId']);
+
+    const category = await this.categoriesRepository.findOneBy({
+      id: params['categoryId'],
+    });
+
+    const categoryAllreadyHasEvent = await this.categoriesRepository.findOne({
+      where: {
+        id: params['categoryId'],
+        events: {
+          id: event.id,
+        },
+      },
+    });
+
+    if (categoryAllreadyHasEvent) {
+      throw new BadRequestException(
+        `Category ${category.category} already has in ${event.name} event`,
+      );
+    }
+
+    event.categories.push(category);
+
+    await this.eventRepository.save({ ...event });
+
+    const { id } = event;
+
+    return this.eventRepository.findOne({
+      select: {
+        id: true,
+        name: true,
+        operation: true,
+        value: true,
+        players: {
+          id: true,
+          name: true,
+          ranking: true,
+          rankingPosition: true,
+        },
+        categories: {
+          id: true,
+          category: true,
+          description: true,
+        },
+      },
+      relations: ['categories', 'players'],
       where: { id },
     });
   }
